@@ -1,4 +1,4 @@
-# Cloudinary SaaS Platform
+# FormatForge
 
 A modern, full-stack SaaS application built with Next.js that leverages Cloudinary for intelligent media management and transformations. This platform enables users to upload, manage, and optimize both images and videos seamlessly.
 
@@ -30,8 +30,8 @@ Ensure you have Node.js installed on your machine. You will also need accounts f
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/cloudinary-saas.git
-cd cloudinary-saas
+git clone https://github.com/your-username/format-forge.git
+cd format-forge
 ```
 
 ### 2. Install dependencies

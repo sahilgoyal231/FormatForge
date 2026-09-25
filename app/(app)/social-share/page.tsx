@@ -1,15 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { CldImage } from "next-cloudinary";
+import { getCldImageUrl } from "next-cloudinary";
 import { Upload, Download, Loader2, Image as ImageIcon, Sparkles } from "lucide-react";
+import toast from 'react-hot-toast';
 
 const socialFormats = {
   "Instagram Square (1:1)": { width: 1080, height: 1080, aspectRatio: "1:1" },
   "Instagram Portrait (4:5)": { width: 1080, height: 1350, aspectRatio: "4:5" },
+  "Instagram Story (9:16)": { width: 1080, height: 1920, aspectRatio: "9:16" },
   "Twitter Post (16:9)": { width: 1200, height: 675, aspectRatio: "16:9" },
   "Twitter Header (3:1)": { width: 1500, height: 500, aspectRatio: "3:1" },
   "Facebook Cover (205:78)": { width: 820, height: 312, aspectRatio: "205:78" },
+  "Facebook Post (1.91:1)": { width: 1200, height: 630, aspectRatio: "1.91:1" },
+  "LinkedIn Post (1.91:1)": { width: 1200, height: 628, aspectRatio: "1.91:1" },
+  "YouTube Thumbnail (16:9)": { width: 1280, height: 720, aspectRatio: "16:9" },
+  "Pinterest Pin (2:3)": { width: 1000, height: 1500, aspectRatio: "2:3" },
+  "TikTok Video (9:16)": { width: 1080, height: 1920, aspectRatio: "9:16" },
 };
 
 type SocialFormat = keyof typeof socialFormats;
@@ -52,7 +59,7 @@ export default function SocialShare() {
       setUploadedImage(data.publicId);
     } catch (error) {
       console.log(error);
-      alert("Failed to upload image");
+      toast.error("Failed to upload image");
     } finally {
       setIsUploading(false);
     }
@@ -197,16 +204,16 @@ export default function SocialShare() {
               )}
               
               <div className="relative shadow-2xl rounded-lg overflow-hidden border border-white/10 ring-1 ring-white/5 transition-all duration-500">
-                <CldImage
-                  width={socialFormats[selectedFormat].width}
-                  height={socialFormats[selectedFormat].height}
-                  src={uploadedImage}
-                  sizes="100vw"
+                <img
+                  src={getCldImageUrl({
+                    src: uploadedImage,
+                    width: socialFormats[selectedFormat].width,
+                    height: socialFormats[selectedFormat].height,
+                    crop: "fill",
+                    gravity: "auto",
+                  })}
                   alt="transformed image"
-                  crop="fill"
-                  aspectRatio={socialFormats[selectedFormat].aspectRatio}
-                  gravity="auto"
-                  ref={imageRef}
+                  ref={imageRef as React.RefObject<HTMLImageElement>}
                   onLoad={() => setIsTransforming(false)}
                   className="max-h-[60vh] w-auto object-contain"
                 />

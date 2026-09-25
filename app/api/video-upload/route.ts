@@ -9,13 +9,6 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Configuration
-cloudinary.config({
-    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
 interface CloudinaryUploadResult {
     public_id: string;
     bytes: number;
@@ -24,6 +17,13 @@ interface CloudinaryUploadResult {
 }
 
 export async function POST(request: NextRequest) {
+    // Configuration
+    cloudinary.config({
+        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    
     const { userId } = await auth();
     if(!userId){
         return NextResponse.json({error: "Unauthorized"}, {status: 401})
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
                         folder: "video-uploads",
                         eager: [
                             {quality: "auto", fetch_format: "mp4"},
+                            {raw_transformation: "e_preview:duration_15:max_seg_9:min_seg_dur_1,f_mp4"},
                         ],
                         eager_async: true
                     },
