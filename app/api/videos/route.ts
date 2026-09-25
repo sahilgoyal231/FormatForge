@@ -51,7 +51,5 @@ export async function GET() {
       { error: "Failed to fetch videos" },
       { status: 500 },
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

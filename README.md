@@ -80,3 +80,37 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 🚀 Deployment
 
 This project is optimized for deployment on [Vercel](https://vercel.com). Make sure to set all your environment variables in the Vercel project settings before deploying. Ensure that your build command is configured as `prisma generate && next build` to properly generate the Prisma client during deployment.
+
+## 🐳 Enterprise Deployment (Docker & Kubernetes)
+
+This repository includes industry-standard configuration for enterprise-grade containerized deployment and CI/CD pipelines.
+
+### 1. Docker Containerization
+The application can be containerized using the provided multi-stage `Dockerfile`. Next.js standalone output is utilized to dramatically reduce the image size.
+
+```bash
+# Build the Docker image
+docker build -t format-forge:latest .
+
+# Run the container locally (requires your .env and .env.local files)
+docker run -p 3000:3000 --env-file .env --env-file .env.local format-forge:latest
+```
+
+### 2. Kubernetes Orchestration
+The `k8s/` directory contains standard Kubernetes manifests (Deployment, Service) to orchestrate this application across a cluster (e.g., AWS EKS, Google GKE, or local Minikube).
+
+```bash
+# Deploy to your Kubernetes cluster
+kubectl apply -f k8s/
+
+# Verify running pods
+kubectl get pods
+```
+
+### 3. CI/CD (GitHub Actions)
+A full CI/CD pipeline is configured in `.github/workflows/docker-publish.yml`. Every commit pushed to the `main` branch automatically triggers a GitHub Actions workflow that:
+1. Checks out the code.
+2. Builds the Docker container.
+3. Authenticates and pushes the resulting image to Docker Hub.
+
+*Note: Requires `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets configured in your GitHub repository settings.*
